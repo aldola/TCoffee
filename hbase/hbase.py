@@ -1,8 +1,8 @@
 class Hbase:
     def read_file(self):
         file=open('../lib/full_lib.txt','r')
-        for line in file.read():
-            print line
+        for line in file.readlines():
+            if
 
 
 if __name__ == '__main__':
