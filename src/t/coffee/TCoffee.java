@@ -11,7 +11,12 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import static java.util.Collections.list;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.util.Bytes;
 
 /**
  *
@@ -24,6 +29,10 @@ public class TCoffee {
      */
     public static void main(String[] args) {
         if(args.length > 0) {
+        
+            HBaseConfiguration hbaseConfig = new HBaseConfiguration();
+            HTable htable = new HTable(hbaseConfig, "access_logs");
+            htable.setAutoFlush(false);
             File file = new File(args[0]);
             BufferedReader reader = null;
             HashMap hm = new HashMap();
@@ -65,8 +74,16 @@ public class TCoffee {
                         }
                     }
                 }
-                
-                htable.put(put);
+                Iterator i = i=hm.keySet().iterator();
+                String key;
+                int counter =0;
+                while(i.hasNext()){
+                    Put p = new Put(Bytes.toBytes(counter));
+                    key = i.next().toString();                    
+                    p.add(Bytes.toBytes(key),Bytes.toBytes(hm.get(key)));      
+                    htable.put(p);
+                    counter ++;
+                }
                 htable.flushCommits();
                 htable.close();
                 System.out.println("done");
