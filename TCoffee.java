@@ -52,37 +52,37 @@ public class TCoffee {
     BufferedReader reader = null;
     int count = 0;
     File file = new File("full_lib.txt");
-	  reader = new BufferedReader(new FileReader(file));
+    reader = new BufferedReader(new FileReader(file));
     String line = null;
     String[] seq = null;
     String[] split = null;
-	  boolean cond = false;
+    boolean cond = false;
     while ((line = reader.readLine()) != null) {
 	    if (line.indexOf('#') >= 0) {
-        line = line.replace("#", "");
-        seq = line.split("\\s+");
-		    cond = true;
+        	line = line.replace("#", "");
+        	seq = line.split("\\s+");
+		cond = true;
 	    }else if(cond && line.indexOf('!') >= 0){
 		    break;
-      }else if(cond){
-        split = line.split("\\s+");
+      	    }else if(cond){
+        	    split = line.split("\\s+");
 		    Put put = new Put(Bytes.toBytes("row"+count));
 		    put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("seq1"), Bytes.toBytes(seq[0]));
-        put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("res1"), Bytes.toBytes(split[1]));
-        put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("seq2"), Bytes.toBytes(seq[1]));
-        put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("res2"), Bytes.toBytes(split[2]));
-        put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("pes"), Bytes.toBytes(split[3]));
-        hTable.put(put);
-        count++;
-        put = new Put(Bytes.toBytes("row"+count));
-        put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("seq1"), Bytes.toBytes(seq[1]));
-        put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("res1"), Bytes.toBytes(split[2]));
-        put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("seq2"), Bytes.toBytes(seq[0]));
-        put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("res2"), Bytes.toBytes(split[1]));
-        put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("pes"), Bytes.toBytes(split[3]));
-        hTable.put(put);
-        count++;
-      }
+	            put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("res1"), Bytes.toBytes(split[1]));
+	            put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("seq2"), Bytes.toBytes(seq[1]));
+	            put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("res2"), Bytes.toBytes(split[2]));
+	            put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("pes"), Bytes.toBytes(split[3]));
+	            hTable.put(put);
+	            count++;
+	            put = new Put(Bytes.toBytes("row"+count));
+	            put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("seq1"), Bytes.toBytes(seq[1]));
+	            put.addColumn(Bytes.toBytes("key"), Bytes.toBytes("res1"), Bytes.toBytes(split[2]));
+	            put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("seq2"), Bytes.toBytes(seq[0]));
+	            put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("res2"), Bytes.toBytes(split[1]));
+	            put.addColumn(Bytes.toBytes("value"), Bytes.toBytes("pes"), Bytes.toBytes(split[3]));
+	            hTable.put(put);
+	            count++;
+      	    }
     }
     hTable.close();
     System.out.println("Done!");
